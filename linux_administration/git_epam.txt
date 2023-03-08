@@ -1,0 +1,83 @@
+git clone git@github:nameuser/gitrepo.git	#clone git repo from github
+git remote -v					#check is stored in github
+
+git status					#check status of files
+git add file					#add to index
+git commit -m "Comment"				#commit from index
+git log						#show commit history
+git reset 					#return everything that was untracked
+
+git pull					#combine git fatch and git merge
+
+
+git show commithash				#show less info
+git show -s --pretty=raw commithash		#show more info about commit in raw
+git ls-tree commithash				#list contents of tree objects
+
+################### undoing changes
+git checkout -- file.txt			#undoing changes of file.txt in file system	(git restore file.txt)
+git checkout .					#undoing changes in directory in file system	(git restore .)
+git clean -xdf					#undoing changes of new filesg in file system
+git reset -- file.txt				#undoing changes in index (git restore --staged file.txt)
+git reset HEAD^^				#undoing changes in commit
+git reset --amend -m "comment"			#undoing changes in commit
+git revert hash					#undoing changes in remote repo
+
+git reset --soft HEAD~1				#reset from commit to index by one step
+git reset --mixed HEAD~1			#reset from commit to local
+git reset --hard HEAD~1				#delete
+
+git chekout -b newbranch			#create and switch to newbranch
+git merge newbranch				#merge current branch with newbranch
+
+git merge --abort				#abort merge
+git checkout --Xours --Xtheirs			#resolve by selection version
+git diff					#resolve manually
+git revert hash					#undo merge
+
+git tag ver1					#mark commit with tag
+git tag --list					#wiew tags
+git push --tags
+git chekcout ver1
+
+git stash save "description"		#see working directory
+git stash list				#view stashes
+git stash pop				#bring them back and remove from stash
+git stash apply				#bring them back and leave in stash
+git stash drop (clear)			#remove
+
+git remote add <name> <url>
+git remote -v
+git remot show <name>
+
+git blame
+git bisect
+git log --pretty=oneline
+git log --pretty=format:"%h %s" -graph
+git config --global alias.last 'log -1 HEAD'
+git last
+git log master..experiment
+git rerere
+git submodule
+git filter-branch --tree-filter 'rm -f passwords.txt' HEAD
+
+git stash save "description"		#see working directory
+git stash list				#view stashes
+git stash pop				#bring them back and remove from stash
+git stash apply				#bring them back and leave in stash
+git stash drop (clear)			#remove
+
+git remote add <name> <url>
+git remote -v
+git remot show <name>
+
+git blame
+git bisect
+git log --pretty=oneline
+git log --pretty=format:"%h %s" -graph
+git config --global alias.last 'log -1 HEAD'
+git last
+git log master..experiment
+git rerere
+git submodule
+git filter-branch --tree-filter 'rm -f passwords.txt' HEAD

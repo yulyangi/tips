@@ -1,0 +1,22 @@
+##########################
+
+# messeges logged by any system unit
+journalctl -u nginx.service
+journalctl -u nginx.service -u mysql.service
+
+# show only entries logged at the error level or above
+journalctl -p err -b -x
+-p means priority or log level
+-b means since last boot
+-x means to add explanatory help text to log messages in the output where this is available
+
+# show only entries for specified syslog identifier
+journalctl  -t dockerd	
+
+# to see messages within a specific time window
+journalctl --since "1 hour ago"
+journalctl --since "2 days ago"
+journalctl --since "2015-06-26 23:15:00" --until "2015-06-26 23:45:00"
+
+   
+

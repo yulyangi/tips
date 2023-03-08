@@ -1,0 +1,84 @@
+docker login						# dockerhub
+docker push <name>					# dockerhub
+
+docker version						# display a version
+
+docker ps						# list running containers
+docker ps -a						# list all containers
+
+docker images						# list images
+docker pull <image>					# pull an image from dockerhub
+
+docker run <image>					# run an image
+docker run -it <busybox>				# run linux in an interactive terminal
+docker run -d <nginx>					# run nginx in background (detached)
+docker run -d -e MY_ENV_VARIABLE=test <nginx>		# run nginx with env var = test
+docker run -d --name <name> <nginx>			# run nginx with name <name>
+docker run -p 8080:80 <nginx>				# map port 8080 (localhost) to port 80 (nginx)
+docker run -v /pathlocalhost:/pathnginx <nginx>		# map volumes (files) from nginx to localhost
+docker run --rm -it <busybox>				# remove a container after stopping
+docker exec -it <id> bash				# execute bash inside running container
+
+docker stop <id>					# stop a container
+
+docker logs <id>					# container logs
+
+docker rm <id>  					# remove a container
+docker container prune  				# remove all stopped containers
+
+docker inspect <id>					# info about container
+
+docker build . -t myapp:1.0				# build image with dockerfile in current dir with name:tag
+docker build . -f Dockerfile.file			# specify dockerfile
+
+docker-compose up					# run docker-compose.yml from current dir
+docker-compose up -d					# run docker-compose.yml in background
+docker-compose down					# stop and remove all containers
+docker-compose up -d --build				# run and rebuild images accordingly docker-compose.yml
+
+# Dockerfile
+FROM python:alpine					# base image
+WORKDIR /app						# working dir for app inside an image (docker move to /app)
+EXPOSE 3000						# opened port in container
+COPY package*.json ./					# copy files to the app dir
+RUN npm install						# install addition app inside container
+COPY . ./						# copy all files from . in localhost to /app
+CMD [ "npm", "run", "dev" ]				# run main.py in python
+
+# docker-compose.yml
+servises:
+  frontend: 			# name of service
+    build: ./frontend		# build custom image by Dockerfile in dir ./frontend
+    restart: always		# restart container after stopping
+    ports:
+      - 3333:3000		# mapping ports
+    volumes:
+      - /app/node_modules	# not remove dir in container while mapping volumes
+      - ./frontend:/app		# mapping volumes
+  api:				# name of service
+    build: ./backend		# build custom image by Dockerfile in dir ./backend
+    depends_on:			# start api conteainer after running mysql container
+      mysql:
+        condition: service_healthy
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: '3306'
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DB: time_db
+  mysql:			# name of service
+    image: mysql 		# download mysql image from dockerhub
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: time_db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - mysql_data:/var/lib/mysql
+volumes:
+  mysql_data:			# volume in docker (not in container) for database

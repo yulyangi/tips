@@ -1,0 +1,32 @@
+    CRACKING PASSWORD HASHES USING JOHN THE RIPPER
+     
+    # Installing JTR
+    apt install john
+     
+    # combining /etc/passwd and /etc/shadow in a single file
+    unshadow /etc/passwd /etc/shadow > unshadowed.txt
+     
+    # cracking in single mode
+    john -single unshadowed.txt
+     
+    # brute-force and dictionary attack
+    john --wordlist=/usr/share/john/password.lst --rules unshadowed.txt
+     
+    # dictionary files:
+    # /usr/share/dict  
+    # /usr/share/metasploit-framework/data/wordlists # -> on Kali Linux
+     
+    # showing cracked hashes  (~/.john/john.pot)
+    john --show unshadowed.txt 
+     
+    # to continue an interrupted (ctrl+c) session, run  in the same directory:
+    john -restore
+     
+    # cracking only accounts with specific shells (valid shells) 
+    john --wordlist=mydict.txt --rules --shell=bash,sh unshadowed.txt
+     
+    # cracking only some accounts
+    john --wordlist=mydict.txt --rules --users=admin,mark unshadowed.txt
+     
+    # cracking in incremental mode (/etc/john/john.conf)
+    john --incremental unshadowed.txt

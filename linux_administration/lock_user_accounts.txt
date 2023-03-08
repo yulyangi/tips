@@ -1,0 +1,16 @@
+sudo passwd -l USERNAME
+sudo password --lock USERNAME
+ 
+# checking the account status
+sudo passwd --status USERNAME
+sudo chage -l USERNAME
+ 
+# unlocking password authentication
+sudo passwd -u USERNAME
+ 
+# disable an account completely
+sudo usermod --expiredate 1 tux
+sudo usermod --expiredate 1970-01-02 tux
+ 
+# checking the account expiration date
+sudo chage -l tux

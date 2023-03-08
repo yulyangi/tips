@@ -1,0 +1,40 @@
+git config --global user.name "Name"
+git config --global user.email mail@mail.com
+git config --list			#info
+git init				#create repo
+git status				#files status
+git add file				#add file to index
+git commit -m 'message'  		#commit all files
+git log					#show hash files and short info
+git show hashofcommit			#more info about commit
+git log -p 				#show more info
+git restore				#restore file status to last commit
+git diff				#show changes in files
+git diff --staged			#show changes in index
+git commit -am 'message' 		#add+commit
+git mv file1 file2			#like mv in bash, add is automaticly
+git rm file				#like rm in bash
+git rm --cashed file			#rm file only form commit
+
+git branch new-api			#create new branch new-api
+git checkout new-api			#switch to new-api
+git merge branch1			#merge current branch with branch1 
+git branch -a				#list all branches
+git branch -d branch1			#delete branch1
+git checkout hash			#move HEAD to commit with hash
+git checkout -b branch			#create branch and move to it
+git checkout -b branch hash		#create branch and move HEAD on hash
+git checkout file			#restore last commit of file
+git reset --hard hash			#move on current branch and set head on hash 
+
+git remote add origin git@github.com:yu...... 		#clone from github with name origin
+git push origin master					#push to github
+git pull origin master					#pull origin commit from githab to local
+git fatch origin					#update remote branches
+git merge origin/master					#merge remote brunch master and local branch
+
+git rebase master					#rebasing commits 
+git tag v1						#lite tag
+git tag -a realisi2020 -m "comment"			#annotate tag 
+git push --tag						#push all tags to github
+git push origin tag					#push only one tag

@@ -1,0 +1,60 @@
+# initialize vagrant 
+vagrant init
+vagrant init <boxpath>
+
+# start a vm
+vagrant up
+vagrant up --provision
+vagrant up --no-provision
+vagrant provision
+vagrant resume
+vagrant reload
+vagrant reload --provision
+
+# get into a vm
+vagrant ssh
+vagrant ssh <boxname>
+
+# stop a vm
+vagrant halt
+vagrant suspend
+
+# clean up a vm
+vagrant destroy
+vagrant destroy -f
+
+# boxes
+vagrant box list
+vagrant box add <name_of_box> file:///d:/path/to/file.box
+vagrant box add <name_of_box> <url>
+vagrant box outdated
+vagrant box remove <name>
+vagrant package --base <name_running_vm> --output <box_name>
+vagrant package --vagrantfile <name> --output <box_name>
+
+# save progress
+vagrant snapshot save [options] [vm-name] <name>
+vagrant snapshot list
+vagrant snapshot restore <name> --no-provision
+
+# tips
+vagrant -v
+vagrant status
+vagrant global-status
+vagrant global-status --prune
+vagrant provision --debug
+vagrant push
+vagrant up --provision | tee provision.log
+
+# get hardinfo about vm inside vm
+vmstat -s
+lscpu
+lspci -v -s 00:02.0
+lshw -C display
+
+# troobleshooting
+vboxmanage list vms
+vboxmanage unregistervm <long id> --delete
+
+
+

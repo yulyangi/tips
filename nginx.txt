@@ -1,0 +1,65 @@
+INSTALL NGINX ON UBUNTU
+apt update
+apt install nginx -y
+nginx -v			# check version
+systemctl status nginx		# check status
+nginx -h			# help
+nginx -t			# check configuration
+
+FILES AND DIRECTORIES
+/etc/nginx			# main directory
+/etc/nginx/conf.d		# directory for conf files
+/var/log/nginx			# log directory 
+/var/www			# directory for website files
+
+GET RID DEFAULT NGINX PAGE
+unlink /etc/nginx/sites-enabled/default
+mkdir -p /var/www/my_domain	# create dir
+
+
+# set permissions properly
+find . -type f -exec chmod 644 {} \;
+find . -type d -exec chmod 755 {} \;
+
+chcon -vR system_u:object_r:httpd_sys_content_t:s0 /var/www/your_domain/
+
+# troubleshooting
+nginx -t
+systemctl status nginx
+lsof -P -n -i :80 -i :443 | grep LISTEN
+netstat -plan | grep nginx
+tail -f /var/log/nginx/*.log
+
+# install php
+dnf install php php-mysqlnd php-fpm
+php --version
+systemctl start php-fpm
+
+# install mariadb
+dnf install mariadb-server
+systemctl status mairadb
+mariadb --version
+# for sqldb - set root password; disable remote connection for the root account;
+# remove anonymous accounts
+mysql_secure_installation
+
+# check
+systemctl status nginx mariadb php-fpm | grep -E "(Loaded|Active)"
+
+# securing
+# set error, access, deny, location dirrective in configfile
+# set passwords
+dnf install httpd-tools
+htpasswd -c /etc/nginx/passwords admin
+htpasswd /etc/nginx/passwords user1
+chown nginx:nginx /etc/nginx/passwords
+chmod 600 /etc/nginx/passwords
+
+# creating SSL sertificate
+dnf install openssl
+mkdir /etc/ssl/private
+chmod 700 /etc/ssl/private
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt
+# does not promt any info during generating
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt -batch
+

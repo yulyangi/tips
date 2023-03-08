@@ -1,0 +1,43 @@
+    ##########################
+    ## Service Management using systemd and systemctl
+    ##########################
+    # showing info about the boot process
+    systemd-analyze
+    systemd-analyze blame
+     
+
+    systemctl list-units
+    systemctl list-units | grep ssh
+     
+
+    sudo systemctl status nginx.service
+    sudo systemctl status nginx --no-pager
+     
+
+    sudo systemctl stop nginx
+     
+
+    sudo systemctl start nginx
+     
+
+    sudo systemctl restart nginx
+     
+
+    sudo systemctl reload nginx
+    sudo systemctl reload-or-restart nginx
+     
+
+    sudo systemctl enable nginx
+     
+
+    sudo systemctl disable nginx
+     
+
+    sudo systemctl is-enabled nginx
+    sudo systemctl is-active nginx
+     
+    # masking a service (stopping and disabling it)
+    sudo systemctl mask nginx
+     
+    # unmasking a service
+    sudo systemctl unmask nginx

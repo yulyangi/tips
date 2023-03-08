@@ -1,0 +1,21 @@
+nmap localhost			 #scan all ports (max 1000)
+nmap -p 20,22,80 localhost	 #scan specified ports
+nmap -p 2202 -sV localhost	 #scan specified port and display listning service on this port
+nmap -p- localhost		 #scan all ports (press ENTER to see progress)
+nmap -sU localhost		 #scan UDP ports
+nmap -sP localhost		 #scan ICMP ports
+
+arp-scan -I enp0s3 -l		 #scan the interface enp0s3
+
+netdiscover			 #scan the interface silently
+netdiscover -i interface	 #scan and specify the interface
+netdiscover -i interface -r 1.1.1.1/24 			#scan subnet
+netdiscover -i interface -r 1.1.1.1/24 -p		#scan subnet in passive mode (only recieved packets)
+
+tcpdump -i interface						#sniff packets
+tcpdump -i interface host 1.1.1.1 				#sniff packets from host
+tcpdump -i interface net 1.1.1.1/24	 			#sniff packets from subnet
+tcpdump -i interface port 443 -vv -n				#https traffic
+tcpdump -i interface dst port 53 -vv -n				#dns traffic
+tcpdump -i interface icmp and host 1.1.1.1 			#capture icmp packets from and to host
+tcpdump -i interface port 80 or port 443 			#capture http or https packets

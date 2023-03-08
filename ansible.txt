@@ -1,0 +1,56 @@
+ansible -i ./hosts servers -m shell -a "lsmem" -f 10
+-i - specify path to the inventory file
+-m - specify a module
+servers - group of machines from the inventory file
+-a - arguments of the shell module
+-f 10 - use multithreading with 5 threads
+
+ansible -i ./hosts servers -m script -a "~/backup.sh" --become -K
+-a "~/backup.sh" - run a script
+--become - become as root
+-K - ask sudo password
+
+# install and remove a package
+ansible -i ./hosts servers -m dnf -a "name=nmap state=present update_cache=true" --become
+ansible -i ./hosts servers -m dnf -a "name=nmap state=absent update_cache=true" --become
+ansible -i ./hosts servers -m dnf -a "name='*' state=latest" --become
+
+# handling services
+ansible -i ./hosts servers -m service -a "name=nginx state=started" --become
+
+# handling groups and users
+ansible -i ./hosts servers -m group -a "name=developers state=present" --become
+ansible -i ./hosts servers -m user -a "name=newuser groups=developers password=pass123 shell=/bin/bash create_home=yes" --become
+
+ansible all -m ping						# ping
+ansible all -m setup						# huge info
+ansible all -m shell -a "uptime"	
+ansible all -m copy -a "src=file.txt dest=/home"		# copy file
+ansible all -m file -a "path=/home/file.txt state=absent"	# delete file
+ansible all -m get-url -a "url=http://google.com dest=/home"	# download file from internet
+ansible all -m apt -a "name=stress state=present" -b		# install stress
+ansible all -m uri -a "url=http://google.com"			# curl
+ansible all -m service -a "name=apache2 state=started enabled=yes" -b
+ansible-inventory --list					# info about hosts
+ansible-playbook file.yml -e <MYVAR=all>			# run with extra var
+ansible-vault create mysecret.txt				# create encryption file
+ansible-vault edit mysecret.yml					# edit encryption file
+ansible-vault view mysecret.yml					# display encryption file
+ansible-vault rekey						# change pass
+ansible-vault encrypt mysecret.yml				# encrypt file
+ansible-vault decrypt mysecret.yml				# dectypt file
+ansible-playbook file.yml --ask-vault-pass			# run encrypted playbook
+ansible-playbook file.yml --vault-password-file file.txt	# run encrypted playbook no ask a password
+ansible-vault encrypt_string					# encrypt string (password for exemple) and paste it in playbook
+echo -n "password" | ansible-vault encrypt_string		# ecnrypt "password"
+
+ansible-playbook file.yml				# run playbook
+ansible-playbook file.yml --tags <name> 		# run particular tag from the file.yml
+ansible-playbook file.yml --list-tags			# list all tags of the file
+ansible-playbook file.yml --skip-tags <name>		# run all tags except <name>
+ansible-palybook file.yml -vvvv				# run with 4th level verbosity	
+ansible-palybook file.yml --start-at-task "Nameoftask"  # run at specified task
+ansible-playbook file.yml --step			# run tasks step by step
+ansible-playbook file.yml -e <filestatevar>=touch	# run playbook with <filestatevar>
+ansible-playbook file.yms --check			# check a file.yml
+

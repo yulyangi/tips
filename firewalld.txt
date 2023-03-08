@@ -1,0 +1,30 @@
+# start firewalld
+dnf install firewalld
+systemctl enable firewalld
+systemctl start firewalld
+
+firewall-cmd --get-default-zone	# show default zone
+firewall-cmd --get-default-zone	# set default zone
+firewall-cmd --get-zones	# list all available zones
+firewall-cmd --get-active-zones	# list all active zones
+firewall-cmd --get-services	# list all services firewalld is aware off
+
+firewall-cmd --permanent --add-port=22/TCP	# add a port for tcp
+firewall-cmd --permanent --remove-port=444/tcp	# remove a port
+firewall-cmd --permanent --add-service=http	# add new service
+firewall-cmd --permanent --remove-service=mysql # remove a service
+firewall-cmd --permanent --add-source=192.168.1.100
+firewall-cmd --permanent --add-source=192.168.1.0/24
+firewall-cmd --permanent --remove-source=192.168.1.100
+
+# block an ip addr
+firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='192.168.1.0/24' reject"
+# whitelist an ip addr for a specific port
+firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.1.100" port protocol="tcp" port="3306" accept'
+
+firewall-cmd --list-all		# list all firewall rules
+
+# other tips
+firewall-cmd --state
+firewall-cmd --zone=home --list-all
+firewall-cmd --zone=home --change-interface=eth0
