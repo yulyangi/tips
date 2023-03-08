@@ -1,0 +1,23 @@
+    # getting shell access to the container
+    docker run -it --name=container1 centos  => press Ctrl+P +Q to exit the container without stopping it
+     
+    # getting a shell in a running container
+    docker container exec -it CONTAINER_ID|CONTAINER_NAME bash
+    Example: docker container exec -it container1 bash
+     
+    # executing shell commands in running container
+    docker container exec CONTAINER_ID|CONTAINER_NAME COMMAND
+    Examples: docker container exec container1 cat /etc/shadow
+    docker container exec container1 yum -y install nmap
+     
+    # stopping a running container 
+    docker container stop CONTAINER_ID|CONTAINER_NAME
+     
+    # starting a stopped container 
+    docker container start CONTAINER_ID|CONTAINER_NAME
+     
+    # removing a stopped container
+    docker container rm CONTAINER_ID|CONTAINER_NAME
+     
+    # removing a running container
+    docker container rm -f CONTAINER_ID|CONTAINER_NAME
