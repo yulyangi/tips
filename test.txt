@@ -1,2 +1,7 @@
 abc
+<<<<<<< HEAD
 niger
+=======
+zzz
+yyy
+>>>>>>> testing
