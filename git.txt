@@ -50,7 +50,8 @@ git reset --hard [commit]                          # clear staging area, rewrite
 
 git stash                                          # save modified and staged changes
 git stash list                                     # list stack-order of stashed file change
-git stash pop                                      # write working from top of stash stack
+git stash pop                                      # get stash from stash stack and remove stash from stash stack
 git stash drop                                     # discard the changes from top of stash stack
+git stash applay		                   # get stash from stash stack, but do not remove stash from stash stack
 
 git tag						   # list existed tags
