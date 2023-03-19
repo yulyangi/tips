@@ -1,0 +1,30 @@
+DNS Domain Name System 
+  - protocol UDP/53
+  - header 12 byte
+Режимы работы DNS сервера:
+  - iterative query (возварщает адрес DNS сервера который ответсвенен за запрашиваемую зону)
+  - recursive query (сервер cам выполняет запрос к другим серварам пока не найдет адрес)
+    - forwarder  - another DNS server that will be queried recursively by our server
+Ответы DNS сервера:
+  - authoritative (ответ от сервера, который ответсвенен за за зону о которой спрашивают)
+  - non-authoritative (ответ от сервера, который не обслуживает спрашиваемую доменную зоне, берется из кэша, может быть устаревшим)
+Flags:
+  - QR (запрос 0 или ответ 1)
+  - OPCODE (0 - стандартный запрос)
+  - AA (авторитетный ответ 1 или нет 0)
+  - TC (пакет был обреза 1 или не был 0)
+  - RD (запрос на рекурсивный режим, использутется только в запросах)
+  - RA (рекурсивный режим доступен, используется только в ответах)
+  - Z (зарезервировано)
+  - RCODE (статус 0 - успешно, другие коды - ошибка)
+Resource Records:
+  Types of records:
+    - A - IPv4
+    - AAAA - IPv6
+    - CNAME (Canonical Name Record) - aliases for the same ip address
+    - MX (Mail eXchange) - record for mail server
+    - SRV (Service record) - record with port numbers
+    - NS (Name Server) - records of authoritaitve servers
+    - PTR (Pointer) - name for reverse zones - in-addr.arpa
+  Classes of records:
+    - IN - internet
