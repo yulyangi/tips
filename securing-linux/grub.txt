@@ -1,0 +1,11 @@
+grub-mkpasswd-pbkdf2   		# generate a hashed password for GRUB
+
+/boot/grub/grub.cfg		# main config file for GRUB, do not change it directly
+/etc/grub.d/			# grub files which generate grub.cfg
+
+sudo vim /etc/grub.d/40_custom	# copy and add two lines with hashed generated password into this file
+set superusers="root"
+password_pbkdf2 root <hash of password>
+
+update-grub2         		# update config conditions
+

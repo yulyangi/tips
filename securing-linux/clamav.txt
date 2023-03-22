@@ -1,0 +1,26 @@
+    # installing clamav
+    sudo apt install && sudo apt install clamav clamav-daemon
+     
+    # checking the status
+    systemctl status clamav-freshclam
+    systemctl status clamav-daemon
+     
+    # starting the clamav daemon
+    systemctl start clamav-daemon
+     
+    # enabling the daemon to start and boot
+    systemctl enable clamav-daemon
+     
+    # getting a test virus
+    wget www.eicar.org/download/eicar.com
+     
+    # scanning a directory using clamdscan
+    clamdscan --fdpass /root/
+     
+    # moving found viruses to a quarantine directory
+    clamdscan --move=/quarantine --fdpass /root
+     
+    # scanning a directory using clamscan
+    clamscan --recursive /etc
+    clamscan --recursive --infected /quarantine
+    clamscan --recursive --infected --remove /quarantine/

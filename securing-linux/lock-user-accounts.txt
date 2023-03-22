@@ -1,0 +1,16 @@
+    # locking password authentication
+    sudo passwd -l USERNAME			# add ! at the beginning of hash in the /etc/shadow
+     
+    # checking the account status
+    sudo passwd --status USERNAME
+    sudo chage -l USERNAME
+     
+    # unlocking password authentication
+    sudo passwd -u USERNAME
+     
+    # disable and enable an account completely
+    sudo usermod --expiredate 1 USERNAME    	# the same:  sudo usermod --expiredate 1970-01-02 tux
+    sudo usermod --expiredate "" USERNAME
+     
+    # checking the account expiration date
+    sudo chage -l USERNAME

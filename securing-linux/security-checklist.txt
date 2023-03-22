@@ -1,0 +1,35 @@
+- Ensure Physical Security
+- BIOS Protection
+  - Physical Security (Kensington lock etc)
+  - Set up a BIOS password
+  - Configure the system to boot automatically from the Linux partition
+  - Set up a password for GRUB
+- Disable Booting from external media devices
+- Boot Loader Protection
+  - BIOS executes MBR -> MBR executes GRUB2 -> GRUB2 loads kernel -> kernel executes systemd
+- Keep the OS updated
+- Check the installed packages and remove the unnecessary ones
+- Check for Open Ports and stop unnecessary services
+- Enforce Password Policy
+- Audit Passwords using John the Ripper
+- Eliminate unused and well-known accounts that are not needed
+- Give users limited administrative access
+- Do not use the root account on a regular basis and do not allow direct root login
+- Set limits using the ulimit command to avoid DoS attacks such as launching a fork bomb
+  - ulimit -a 			# list all limits
+  - /etc/security/limits.conf	# set limits in this file
+- Set proper file permissions
+  - Audit the Set User ID (SUID) and Set Group ID (SGID) binaries on the system
+  - Do not mount remote filesystems with root read-write access. Read-only access would be enough
+  - Set the sticky bit on any world-writable directories
+  - harden /tmp – mount it on a separate partition (not to fill all the disk space), mount it with noexec,nosuid bits set
+- Implement File Monitoring (Host IDS - AIDE)
+- Scan for Rootkits, Viruses, and Malware (Rootkit Hunter, chkrootkit, ClamAV)
+- Use Disk Encryption to protect your data. Don’t forget to encrypt your Backups as well
+- Secure every Network Service especially SSHd
+- Scan your Network and Hosts using Nmap
+- Securing Your Linux System with a Firewall (Netfilter/Iptables)
+- Monitor the firewall and its logs
+- Monitor your logs and search for suspicious activity (logwatch)
+- Scan your servers using a VAS such as Nessus or OpenVAS
+- Make backups and test them
