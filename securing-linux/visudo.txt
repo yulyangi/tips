@@ -1,0 +1,30 @@
+sudo -k				# the next time sudo is run, a password will be required
+
+visudo				# edit /etc/sudoers
+visudo -f <specify a file>      # edif file in /etc/sudoers.d/
+
+# exemples
+1      2   3         4
+root   ALL=(ALL:ALL) ALL
+dan    ALL=(root)    /bin/cp,/bin/ls,/usr/bin/vim,!/usr/bin/vim /etc/shadow
+max    ALL=          NOPASSWD:ALL
+john   ALL=          NOPASSWD:/bin/cat,/usr/bin/updatedb,PASSWD:/bin/rm,NOEXEC:/bin/less
+%sudo  ALL=(ALL:ALL) ALL
+%team  ALL=(root)    /usr/bin/apt update
+# 1 - user or group
+# 2 - rules applies to all hosts
+# 3 - which users from group 1 allow to run command as root (dan can run command as root)
+# 3 - if emtpy = root (max and john can run commend as root)
+# 4 - commands to which the rule applies
+# 4 - ! forbids to run the command
+# 4 - max allow run all commands as root without promting sudo password
+# 4 - john not allow to run other command from the less command
+
+# organised users into group(alias) and then implement rules for this group(alias)
+User_Alias MYUSERALIAS=dan,max,john
+
+# command alias
+Cmnd_Alias MYCMDALIAS=/usr/bin/cp,/usr/bin/ls
+
+# implement aliases
+MYUSERALIAS ALL=(root)	MYCMDALIAS

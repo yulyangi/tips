@@ -1,0 +1,17 @@
+    # installing rkhunter
+    apt update && apt install rkhunter
+     
+    # updating its data file of stored values with the current values
+    rkhunter --propupd
+     
+    # running a full system check
+    rkhunter --check # => /var/log/rkhunter.log
+    rkhunter --check --report-warnings-only
+     
+     
+    # installing chkrootkit
+    apt install chkrootkit
+     
+    # running a scan
+    chkrootkit
+    chkrootkit -q

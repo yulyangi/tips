@@ -1,7 +1,9 @@
     ##########################
     ## VIM
     ##########################
-    
+    # choose default text editor
+    sudo update-alternatives --config editor
+
     vimtutor => vim tutorial file
     
     :!ls => run the shell command 'ls' in vim editor
