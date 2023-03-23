@@ -1,0 +1,64 @@
+incoming traffic     => INPUT CHAIN of the filter table
+outgoing traffic     => OUTPUT CHAIN of the filter table
+routed traffic	     => FORWARD CHAIN of the filter table
+SNAT/MASQUERADE      => POSTROUTING CHAIN of the nat table
+DNAT/Port Forwarding => PREROUTING CHAIN of the nat table
+
+Modify values from the packet's headers add rules to the mangle table
+To skip the connection tracking add rules with NOTRACK target to the raw table
+
+Order of the rules is important!
+
+iptables [-t table_name] -COMMAND CHAIN_NAME matches -j TARGET
+
+TABLE		COMMAND		CHAIN		matches			Target/Jump
+-----------------------------------------------------------------------------------
+filter(default) -A (append)	INPUT		-s source_ip		ACCEPT
+nat		-I (insert)	OUTPUT		-d dest_ip		DROP
+mangle		-D (delete)	FORWARD		-p protocol		REJECT
+raw		-R (replace)	PREROUTING	--sport source_p	LOG
+		-F (flush)	POSTROUTING	--dport dest_p		SNAT
+		-Z (zero)	USER_DEFINED	-i incoming_int		DNAT
+		-L (list)			-o outgoing_int		MASQUERADE
+		-S (show)			-m mac			LIMIT
+		-N (create a chain)		-m time			RETURN
+		-X (delete a chain)		-m quota		TEE
+		-P (set the policy)		-m limit		TOS
+						-m recent		TTL
+------------------------------------------------------------------------------------
+iptables -L							# list rules
+iptables -vnL							# see more information
+iptables -t nat -L						# list rules of the nat table
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP	# drop all ping x.x.x.x requests
+iptables -A INPUT -s X.X.X.X -j DROP				# drop all incoming traffic from X.X.X.X ip address
+iptables -A INPUT -p tcp -m multiport --dports 80,443		# drop all incoming traffic from all addresses to ports 80, 443
+iptables -A INPUT -p tcp --dport 22 -m time --timestart 10:00 --timestop 16:00 -j ACCEPt	# accept ssh traffic between from 10:00 to 16:00, time UTC
+iptables -A OUTPUT -d X.X.X.X/X -j DROP				# drop all outgoing traffic to X.X.X.X/X network
+iptables -A OUTPUT -d www.exemple.com -j DROP			# drop all outgoing traffic to www.exemple.com 
+iptables -A OUTPUT -p tcp --dport 443 -d 0/0 -j ACCEPT		# accept outgoing tcp traffic to port 443 to any ip address
+iptables -A OUTPUT -p tcp --dport 80 -d www.ubuntu.com -j DROP  # drop all tcp packets to www.ubuntu.com
+iptables -A INPUT -p tcp --dport 25 -j DROP			# drop all incoming packets to 25 port
+iptables -I INPUT 1 -p udp --dport 69 -j DROP			# insert rule to the first position
+iptables -F INPUT						# delete all rules in input chain
+iptables -Z							# reset packets and bite counters which you can see by -vnL command
+iptables -N MYCHAIN						# create user-defined chain
+iptables -X MYCHAIN						# delete user-defined chain
+iptables -P FORWARD DROP					# set default drop policy to the forward chain
+iptables -D OUTPUT 2						# delete second rule from the output chain
+
+STATEFULL FIREWALL
+Packets states:
+  NEW		# the first packet from a connection
+  ESTABLISHED	# packets that are part of existing connection
+  RELATED	# packets that are requesting a new connection and are already part of an existing connection
+  INVALID	# packets that are not part of any existing connection
+  UNTRACKED	# packets marked within the raw table with the NOTRACK target
+
+iptables -A INPUT -i lo -j ACCEPT					# accept all incoming traffic to the loopback interface
+iptables -A OUTPUT -i lo -j ACCEPT					# accept all outgoing traffic from the loopback interface
+iptables -A INPUT -m state --state INVALID -j DROP			# drop all packets from outside from unknow services, good for desktop machines
+iptables -A OUTPUT -m state --state INVALID -j DROP			# drop all packets going to unknow services, good for desktop machines
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT	#
+iptables -A OUTPUT -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT	# 
+
+iptables -A INPUT -m mac --mac-source xx:xx:xx:xx:xx:xx -j DROP		# drop all incoming traffic to the mac address
