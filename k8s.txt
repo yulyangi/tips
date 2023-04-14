@@ -1,0 +1,13 @@
+minikube start
+minikube start --cpus=4 --memory=8gb --disk-size=25gb
+minikube start -p MYCLUSTERNAME
+minikube status
+minikube ssh
+minikube stop
+minikube delete
+kubectl cluster-info
+kubectl get componentstatuses
+kubectl get nodes
+
+kubectl get pods
+kubectl run name-of-pod --image=name-of-image --port=nu

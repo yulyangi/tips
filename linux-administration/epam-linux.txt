@@ -1,0 +1,153 @@
+####################################### LVM #######################################
+pvcreate /dev/sdb1 					# utility to initialize and display physical volumes
+pvdisplay
+pvscan
+
+vgcreate vg_newlm /dev/sdb1				# create a logical group from sdb1 volume
+vgcreate vg_newlm /dev/sdb1 /dev/sdc1 /dev/sdc2		# create logical group from multiple volumes
+vgdisplay						# display a list of logical groups
+lvcreate --name centos7_newvol -l 100%FREE vg_newlvm	# create a logical volume called centos7_newvol that uses all of the unallocated space in the volume group vg_newlvm
+lvcreate --name my_volume -l 50%VG vg_newlvm		# create a logical volume called my_volume that uses 50% space in the vg_newlvm volume group
+lvdisplay						# display a list of logical volumes
+
+mkfs.ext4 /dev/vg_newlvm/centos7_newvol			# format a logical volume called centos7_newvol into ext4 filesystem
+mkfs.btrfs /dev/vg_newlvm/centos7_newvol		# format a logical volume called centos7_newvol into btrfs filesystem
+mkfs.ntfs /dev/vg_newlvm/centos7_newvol			# format a logical volume called centos7_newvol into ntfs filesystem
+
+####################################### SWAP #######################################
+cat /proc/swaps						# check if swap is activated
+free -h							# check if swap is activated
+swapon							# check if swap is activated
+
+vcreate VolGroup00 -n LogVol02 -L 2G			# create the LVM2 logical volume of size 2 GB
+mkswap /dev/VolGroup00/LogVol02				# format the new swap space
+/dev/VolGroup00/LogVol02 swap swap defaults 0 0		# add the following entry to the /etc/fstab file
+systemctl daemon-reload					# regenerate mount units so that your system registers the new configuration
+swapon -v /dev/VolGroup00/LogVol02			# activate swap on the logical volume
+
+dd if=/dev/zero of=/swapfile bs=1024 count=4194304	# create an empty file (4GiB), replacing count with the value equal to the desired block size
+mkswap /swapfile					# set up the swap file with the command
+chmod 0600 /swapfile					# change the security of the swap file so it is not world readable
+/swapfile swap swap defaults 0 0			# enable the swap file at boot time, edit /etc/fstab as root to include the following entry
+systemctl daemon-reload					# regenerate mount units so that your system registers the new /etc/fstab configuration
+swapon /swapfile					# ctivate the swap file immediately
+
+swapoff -v /swapfile					# at a shell prompt, execute the following command to disable the swap file (where /swapfile is the swap file)
+vi /etc/fstab						# remove its entry from the /etc/fstab file
+systemctl daemon-reload					# regenerate mount units so that your system registers the new configuration
+rm /swapfile						# remove the actual file
+
+####################################### RUNLEVELS ##################################
+# 0 poweroff.target (runlevel0.target)  	halt, shuts down the system
+# 1 rescue.target (runlevel1.target)      	single-user mode, mode for administrative tasks
+# 2 multi-user.target (runlevel2.target) 	multi-user mode, does not configure network interfaces and does not export network services
+# 3 multi-user.target (runlevel3.target) 	multi-user mode with networking, starts the system normally
+# 4 multi-user.target (runlevel4.target) 	not used/user-definable, for special purposes
+# 5 graphical.target (runlevel5.target) 	start the system normally with appropriate display manager, as runlevel 3 + display manager
+# 6 reboot.target (runlevel6.target)  		reboot, reboot the system
+
+runlevel					# get current runlevel
+systemctl get-default				# view default runlevel
+systemctl set-default runlevel0.target		# set default runlevel
+systemctl list-dependencies graphical.target	# check services that run at 5th runlevel
+
+####################################### SHELLS #####################################
+/etc/shells					# get an overview on known shells
+
+###################################### ALTERNATIVES ###############################
+alternatives [options] --install link name path priority [--slave link name path]... [--initscript service]
+alternatives [options] --remove name path
+alternatives [options] --set name path
+alternatives [options] --auto name
+alternatives [options] --display name
+alternatives [options] --config name
+
+####################################### CROND ######################################
+crontab -e						# add or update job in crontab
+crontab -u username -e					# add or update job for user
+0 2 * * * /bin/sh backup.sh				# schedule a cron to execute at 2am daily
+0 5,17 * * * /scripts/script.sh				# schedule a cron to execute twice a day
+* * * * *  /scripts/script.sh				# schedule a cron to execute on every minutes
+0 17 * * sun  /scripts/script.sh			# schedule a cron to execute on every Sunday at 5 PM
+*/10 * * * * /scripts/monitor.sh			# schedule a cron to execute on every 10 minutes
+* * * jan,may,aug *  /script/script.sh			# schedule a cron to execute on selected months
+0 17 * * sun,fri  /script/script.sh			# schedule a cron to execute on selected days
+0 2 * * sun  [ $(date +%d) -le 07 ] && /script/script.sh# schedule a cron to execute on first sunday of every month
+0 */4 * * * /scripts/script.sh				# schedule a cron to execute on every four hours
+0 4,17 * * sun,mon /scripts/script.sh			# schedule a cron to execute twice on every Sunday and Monday
+* * * * *  sleep 30; /scripts/script.sh			# schedule a cron to execute on every 30 Seconds
+* * * * * /scripts/script.sh; /scripts/scrit2.sh	# schedule a multiple tasks in single cron
+
+####################################### SELinux ####################################
+getenforce						# find out current status of SELinux
+sestatus						# find out current status of SELinux
+$ cat /etc/selinux/config
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#     enforcing - SELinux security policy is enforced.
+#     permissive - SELinux prints warnings instead of enforcing.
+#     disabled - No SELinux policy is loaded.
+SELINUX=disabled
+# SELINUXTYPE= can take one of these two values:
+#     targeted - Targeted processes are protected,
+#     minimum - Modification of targeted policy. Only selected processes are protected. 
+#     mls - Multi Level Security protection.
+SELINUXTYPE=targeted
+
+Enable SELinux
+vi /etc/sysconfig/selinux
+SELINUX=permissive or SELINUX=enforcing
+reboot
+
+Disable linux
+vi /etc/sysconfig/selinux
+SELINUX=disabled
+reboot
+
+semodule -l		# list the SELinux policy modules currently loaded into memory
+# changing SELinux Boolean Settings
+semanage boolean -l
+getsebool ftpd_anon_write
+setsebool ftpd_anon_write on
+
+######################################## MONITORING CPU #############################
+lscpu		# gathers information about the CPU architecture
+mpstat		# display CPU statistics of individual CPU (or) Core
+mpstat -P ALL
+sar		# display CPU statistics of individual CPU (or) Core
+sar -P ALL 1 1
+
+####################################### MONITORING MEMORY ##########################
+free		# show information about operating memory
+vmstat 		# provides instant reports on your system's processes, memory, paging, block input/output, interrupts, and CPU activity
+
+####################################### MONITORING STORAGE #########################
+df			# show available drive space in the system
+du 			# show disk usage information for given folder
+du –sh /etc/*
+lsof			# view a list of open files
+lsof /usr/bin/sshd	# listing of files for processes executing the command
+lsof –c sshd 		# listing of files for processes executing the command
+lsof -i  		# listing of all Internet and x.25 (HP-UX) network files (connections)
+vmstat			# provides instant reports on your system's processes, memory, paging, block input/output, interrupts, and CPU activity
+vmstat –d 		# report disk statistics 
+iostat			# monitors and reports on system input/output device loading
+iostat -t
+iostat -d		
+
+####################################### LOGS #######################################
+dmesg -T 				# command on most Unix-like operating systems that prints the message buffer of the kernel
+journalctl -k 				# to show logs of kernel
+journalctl -t dockerd			# to show only entries for specified syslog identifier
+journalctl -p err –b –x	 		# to show only entries logged at the error level or above, you can type
+journalctl -u httpd	
+journalctl --since "2 days ago"		# to see messages logged within a specific time window, we can use the --since and --until option
+/var/log/messages			# contains global system messages, including the messages that are logged during system startup
+/var/log/secure				# contains information related to authentication and authorization privileges
+/var/log/cron				# whenever cron daemon (or anacron) starts a cron job, it logs the information about the cron job in this file
+/var/log/auth.log			# contains system authorization information, including user logins and authentication machinsm that were used
+/var/log/maillog /var/log/mail.log	# contains the log information from the mail server that is running on the system
+/var/log/mail/				# this subdirectory contains additional logs from your mail server
+/var/log/sa/				# contains the daily sar files that are collected by the sysstat package
+
+
