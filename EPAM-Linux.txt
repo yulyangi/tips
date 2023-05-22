@@ -1,0 +1,115 @@
+PHYSICAL VOLUMES
+  sudo pvcreate /dev/sdb1
+  sudo pvscan
+  sudo pvdisplay 
+
+VOLUME GROUPS
+  sudo vgcreate vg_newlvm /dev/sdb1		
+  sudo vgcreate vg_newlvm /dev/sdb1 /dev/sdc1 /dev/sdc2 
+  sudo lvcreate --name centos7_newvol -l 100%FREE vg_newlvm
+  lvdisplay 
+
+FILESYSTEM CREATION
+  sudo mkfs.ext4 /dev/vg_newlvm/centos7_newvol
+  sudo mkfs.btrfs /dev/vg_newlvm/centos7_newvol
+  sudo mkfs.ntfs /dev/vg_newlvm/centos7_newvol
+
+SWAP
+  cat /proc/swaps
+  free -h
+
+  lvcreate VolGroup00 -n LogVol02 -L 2G
+  mkswap /dev/VolGroup00/LogVol02
+  echo '/dev/VolGroup00/LogVol02 swap swap defaults 0 0' >> /etc/fstab
+  systemctl daemon-reload
+  swapon -v /dev/VolGroup00/LogVol02
+
+  dd if=/dev/zero of=/swapfile bs=1024 count=65536
+  mkswap /swapfile
+  chmod 0600 /swapfile
+  echo '/swapfile swap swap defaults 0 0' >> /etc/fstab
+  systemctl daemon-reload
+  swapon /swapfile
+
+  swapoff -v /swapfile
+  vi /etc/fstab
+  systemctl daemon-reload
+  rm /swapfile
+
+GRUB
+  /boot/grub/grub.conf
+  /etc/grub.conf
+
+RUNLEVELS
+  systemctl get-default
+  systemctl set-default runlevel0.target
+
+INTERACTIVE LOGIN SHELL
+  /etc/profile
+  ~/.bash_profile
+  ~/.bash_login or ~/.profile
+  ~/.bash_logout
+
+INTERACTIVE NON-LOGIN SHELL
+  ~/.bashrc
+
+SELINUX
+  getenforce
+  sestatus
+  cat /etc/selinux/config
+  vi /etc/sysconfig/selinux
+  semodule -l | less
+  semanage boolean -l | less
+
+NETWORKING
+  ifconfig
+  ifconfig –a
+  ifconfig eth0
+  ifconfig eth0 up
+
+  ip address add 192.168.2.223/24 dev eth1
+  ip addr show dev eth1
+  ip route add 192.0.2.1 via 10.0.0.2 dev eth0
+  ip route
+
+  service network restart
+  
+  cat /etc/network/interfaces
+  cat /etc/nsswitch.conf
+
+  netstat -ant
+  sudo netstat -nlpt
+
+  whois google.com
+  tcpdump
+
+CPU
+  lscpu
+  mpstat -P ALL
+  sar -P ALL 1 1
+
+MEMORY
+  free -h
+  vmstat -a
+  vmstat -f
+
+STORAGE
+  df –h
+  du –sh /etc/*
+  lsof | less
+  vmstat –d
+  vmstat -p sda2 
+  iostat –t
+  iostat -d
+
+LOGS
+  dmesg
+  journalctl -u httpd
+  /var/log/messages 
+  /var/log/secure
+  /var/log/cron
+  /var/log/auth.log
+  /var/log/maillog /var/log/mail.log 
+  /var/log/mail/ 
+  /var/log/sa/ 
+  
