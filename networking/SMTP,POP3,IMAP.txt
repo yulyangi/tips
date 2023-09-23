@@ -1,97 +1,62 @@
-SMTP (Simple Mail Transfer Protocol)
-Задачи:
-  - проверка корректности настроек системы и предоставление «разрешения» на отправку email-сообщения
-  - отправка исходящего сообщения на адрес электронной почты и подтверждение успешной доставки
-  - протокол простой, но не безопасный, если сообщение не доставлено отправитель информируется
-Использует:
-  - порт 25, посредством которого почта передается между почтовыми серверами
-  - порт 587, благодаря которому почта передается от почтового клиента на сервер
-  - порт 465, когда требует защищенного SSL-соединения (SMTPS)
-  - как правило использует TCP/25
-Сообщение электронной почты состоит из:
-  - конверт (применяется для передачи сообщений в формате запрос-ответ)
-  - заголовок (начинается на команде DATA)
-  - тело письма (отделяется пустой строкой, заканчивается отдельной строкой с точкой, точка удаляется при передаче)
-Команды:
-  - HELO (применяется для установки соединения, нужно указать свой домен и свой почтовый адрес)
-  - MAIL (задается адрес отправителя)
-  - RCPT (задается адрес получателя, одна команда на одного получателя)
-  - DATA (уведомляет принимающий сервер о завершении конверта)
-  - QUIT (разрывает соединение сразу после приема сообщения)
-Ответы SMTP:
-  - код сообщения, начинается на 2 (успешная отправка), 3 (требуются дополнительные данные), 5 (сбой)
-  - текстовое сообщение (объясняет, что произошло)
-Порядок работы:
-  - указывается адрес отправителя, система пользователя соединяется с SMTP почтового клиента
-  - передаются данные на сервер, включая email получателя и отправителя, тему письма, содержимое
-  - осуществляется поиск SMTP сервера получателя сообщения
-  - если сервер-получатель не найден, выдача ошибки, протокол сообщит что письмо не отправлено
-  - если все хорошо, в работу вступают POP и IMAP
+SMTP Simple Mail Transfer Protocol
+Responsible for:
+  - client-server model
+  - transferring email messages from the sender's email client to the recipient's email server
+Ports:
+  - 25  between SMTP servers
+  - 587 clients send email to SMTP server
+  - 465 SMTP over SSL/TLS (SMTPS)
+Commands:
+  - HELO/EHLO to initiate a connection between the client and server
+  - MAIL FROM to specify the email address of the sender
+  - RCPT TO   to specify the email address of the recipient
+  - DATA      to begin the transfer of the email message
+  - QUIT      to terminate the connection
+Response codes:
+  - 250 OK
+  - 354 start mail input
+  - 550 user not found
 
 
-POP3 (Post Office Protocol)
-Задачи:
-  - чтение почты из хранилища сообщений по модели "загрузить и удалить"
-  - после загрузки письма письмо удаляется с сервера, загружаются сразу все письма
-  - может работать только с одним почтовым клиентом
-  - нет возможности создавать папки, фильтры флаги и т.д. для писем, в целом протокол простой
-Использует: 
-  - как правило TCP/110 
-Состояния сеанса:
-  - авторизация (клиент представляется и подтверждает, что он тот, за кого себя выдает)
-  - транзакция (клиент загружает почту и помечает загруженные письма на удаление)
-  - обновление (удаляет помеченные сообщения и закрывает соединение)
-Команды:
-  - USER (указать имя пользователя)
-  - PASS (указать пароль)
-  - STAT (количество писем на сервере)
-  - LIST (передача инфо о сообщениях)
-  - REPT (передать сообщение на клиент)
-  - TOP (передать заголовок на клиент)
-  - DELE (пометить сообщение на удаление)
-  - QUIT (закрытие транзакции, удаление сообщений, отключение)
-Ответы POP:
-  - +OK (успешное выполнение)
-  - -ERR (ошибка)
+POP3 (Post Office Protocol version 3)
+Responsible for:
+  - to retrieve email messages from an email server
+  - TCP/110
+Session states:
+  - authorization 
+  - transaction
+  - updating
+Commands:
+  - USER to specify the username of the email account
+  - PASS to specify the password of the email account
+  - LIST to list the email messages available on the email server
+  - RETR to retrieve a specific email message from the email server
+  - DELE to delete a specific email message from the email server.
+  - QUIT to terminate the connection 
+Response codes:
+  - +OK
+  - -ERR
 
 
-IMAP (Internet Message Access Protocol)
-Задачи:
-  - чтение почты из хранилища сообщений, клиенты подключаются к серверу и загружает после запроса юзера
-  - сервер может выполнять сложные операции с письмами (поиск и т.д.), папки INBOX, Drafts, Junk, Sent, Trash
-  - может работать с несколькими клиентами, может выполнять несколько команд одновременно 
-Использует:
-  - как правило TCP/143 
-  - существует IMAPS/993
-Флаги письма:
-  системные флаги:
-    - \Seen (сообщение просмотрено)
-    - \Answered (на сообщение отправлен ответ)
-    - \Flagged (у сообщения повышенная важность)
-    - \Draft (письмо черновик)
-    - \Deleted (сообщения на удаление)
-    - \Recent (новое сообщение)
-  несистемные флаги: ($Forwarded, Junk etc.)
-Cостояния:
-  - Not Authenticated (клиент только что подключился и должен пройти аутентификацию)
-  - Authenticated (успешно прошел аутентификацию)
-  - Selected (выбор папки для работы, чтение и другие действия)
-  - Logout (разрыв соединения)
-Команды:
-  - теги для определения типа команды (какой команде ответ) при ответе от почтового сервера (A0001, A0002...)
-  - команд очень много (LOGIN, LIST, SELECT, FETCH, STORE, EXPUNGE, LOGOUT, COPY, SEARCH etc.)
-Ответы IMAP:	
-  - OK (успешное выполнение) + поясняющее сообщение
-  - NO (ошибка) + поясняющее сообщение
-  - BAD (неправильная команда) + поясняющее сообщение
-
-
-
-  
-
-
-
-  
-
-
-
+IMAP Internet Message Access Protocol
+Responsible for:
+  - to retrieve email messages from an email server
+  - allows users to access their email messages from multiple devices and email clients
+  - TCP/143
+  - TCP/993 IMAPS
+Commands:
+  LOGIN   to specify the username and password of the email account
+  SELECT  to select a specific mailbox on the email server
+  FETCH   to retrieve a specific email message from the email server
+  STORE   to modify the status of a specific email message on the email server (read or unread)
+  EXPUNGE to permanently delete email messages from the email server
+  LOGOUT  to terminate the connection between the client and server
+Session states:
+  - Not Authenticated 
+  - Authenticated
+  - Selected
+  - Logout
+Response codes:
+  - OK   OK
+  - NO   error
+  - BAD  wrong command

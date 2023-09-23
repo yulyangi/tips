@@ -1,47 +1,34 @@
-Транспортный уровень - сетенезависимый, протоколы TCP, UDP
-Порты:
-  - известные 1-1024 
-  - зарезервированные 1025-49151
-  - динамические 49151-65535 (назначаются автоматически системой)
+Ports:
+  - well-known 1-1024 
+  - registerd 1025-49151
+  - dynamic 49151-65535
 
 
 UDP User Datagram Protocol
-Сообщение UDP - дейтаграмма
-Особенности:
-  - высокая скорость работы
-  - нет гарантии доставки данных
-  - нет гарантии сохранения порядка сообщений
-  - минимум 8 байт (только заголовок)
-  - максимум 65515 байт (максимальная длина IP пакета)
-  - пример: DNS uses UDP/53, DHCP uses UDP/68(client) UDP/67(server)
+Features:
+  - message - datagram
+  - connectionless protocol
+  - packet is transmitted independently and may take a different path
+  - used for applications that require fast and efficient transmission
+  - works by breaking data into packets and adding a header to each packet
+  - not provide reliable data transmission or error detection
+  - transmit data more quickly and efficiently than TCP
+  - IP packet 65515 bites
+  - DNS uses UDP/53, DHCP uses UDP/68(client) UDP/67(server)
 
 
 TCP Transmission Control Protocol
-Особенности:
-  - низкая скорость работы
-  - гарантия доставки
-    - остановка и ожидание подтверждения
-    - скользящее окно (одно подтверждение на несколько сегментов)
-  - гарантия сохранения порядка сообщений
-  - пример: HTTP uses TCP/80, POP3 uses TCP/110
-  - размер: сегмент 1460 байт + 20 байт заголовок TCP + 20 байт заголовок IP = 1500
-Процесс передачи данных (дуплексная передача, данные передаются в обе стороны):
-  - установка соединения (трехкратное рукопожатие)
-    - отправка SYN и номер передаваемого байта 7537 (например) от отправителя получателю
-    - отправка SYN и номер байта 36829 и ACK 7538 от получателя отправителю
-    - отправка байт 7538 и ACK 36830 -> соединение установлено
-  - передача потока байт от приложения -> деление на сегменты
-    - отправка сегмента от отправителя получателю, установка таймера ожидания ACK, номер первого байт сегмента
-    - отправка подтверждения от получателя отправителю (ACK, Acknowledgment), ждет первый байт следующего сегмента
-  - разрыв соединения
-    - корректное закрытие FIN или из-за критической ситуации RST 
-Управление потоком (когда слабый хост или приложение не успевают читать данные):
-  - получатель в ответном сообщении указывает размер окна - сколько данных может принять получатель следующий раз
-  - размер окна может быть 0 - получатель не может принимать данные
-  - отправитель может передать сегмент Zero Window Probe - убедиться что получатель на связи но до сих пор не может принимать данные
-Управление перегрузкой (перегружена сама сеть, а не конечный хост):
-  - решает проблему окно перегрузки на отправителе - регулирует сколько можно отправить данных в зависимости от загрузки сети
-  - размер окна перегрузки расчитывается методом AIMD Additive increase/multiplicative descrease
-  - другой способ регулирования размера окна перегрузки - "медленный старт" - если все хорошо увеличивает размер окна экспоненциально
-  - как правило использутеся "медленный старт" + AIMD
-  - также используется флаги ECE, CWR, NS в заголовке TCP - сигнализируют о перегрузке в сети
+Responsible for:
+  - establishing a connection between the source and destination devices
+  - breaking data into packets
+  - ensuring that packets in the correct order and without errors
+  - uses a sliding window mechanism to control the flow of data 
+Features:
+  - connection-oriented communication
+  - flow control
+  - error detection and correction (includes a checksum field in the packet header)
+  - congestion control (slow start, congestion avoidance, fast retransmit)
+Three way handshake:
+  - SYN client sends a SYN packet to the server, it wants to establish a connection
+  - SYN-ACK server responds with a SYN-ACK packet
+  - ACK client sends an ACK packet to the server, ready to begin transmuting data

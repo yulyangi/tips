@@ -1,23 +1,13 @@
 IP Internet Protocol
-Задачи IP
-  - объединение сетей
-  - маршрутизация
-  - качество обслуживания
-Передача данных:
-  - без гарантии доставки
-  - без сохранения следования сообщений
-  - без установки соединения
-Header:
-  - номер версии: IPv4 or IPv6
-  - длина заголовка
-  - тип сервиса
-  - общая длина - максимум 65535 байт, как правило 1500 байт
-  - индентификатор пакета, флаги(DF(don't fragment), MF(MF(more fragments)), смещение фрагмента - для фрагментации пакета
-  - TTL (Time to live)
-  - код протокола следующего уровня (TCP(6), UDP(17), ICMP(1))
-  - контрольная сумма
-  - IP отправителя
-  - IP получателя
+Responsible for:
+  - routing data packets between different networks
+  - fragmentation and reassambly (can fragment large packets into smaller packets)
+  - error detection (header includes checksum field)
+  - time to live (TTL field in the packet header specifies the maximum number of hops)
+Data transition:
+  - do delivery guarantee
+  - packets transmitted independently, may take a different path 
+  - connectionless protocol (does not establish a dedicated connection)
 
 
 DHCP Dynamic Host Configuration Protocol
@@ -27,14 +17,14 @@ Requests:
   - R REQUEST from the client to the server with offered IP address
   - A ACKNOWLEDGMENT from the server to the client
 Others requests:
-  - NACK - prohibit the use IP address
+  - NACK    - prohibit the use IP address
   - RELEASE - release IP address
-  - INFORM - additional information
-Lease time - time for using IP
-DHSP предоставляет дополнительно:
-  - маску подсети
-  - шлюз
-  - адреса DNS серверов
-  - адреса серверов времени
-  - маршруты и другую информацию
-DHSP Relay - конфигурация роутера, позволяющая передавать DHCP запрос DHCP серверу находящемуся в другой сет, если в текуще сети нет DHCP сервера
+  - INFORM  - additional information
+Lease time  - time for using IP
+DHSP provides
+  - automatic IP address assignment
+  - subnet mask
+  - default gateway
+  - DNS server addresses
+  - lease time
+  - time server addresses and others
