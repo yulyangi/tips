@@ -1,0 +1,28 @@
+Hardware Virtualization
+  - creating a virtual platform of something
+  - include virtual computer hardware, virtual storage, virtual computer
+  - used hypervisor 
+
+Hardware virtualization types
+  - Paravirtualization
+  - Full virtualization
+  - Hardware-assisted virtualization
+
+Hardware virtualization vs. OS virtualization
+  OS virtualization-based systems include Docker, Solaris Containers and Linux-VServer
+
+Hypervisor
+  - virtual machine monitor
+  - software that creates and runs virtual machines
+
+Benefits of hypervisors
+  - speed
+  - efficiency
+  - flexibility
+  - portability
+
+Types of hypervisor
+  - type 1 # bare metal, acts like a lightweight operating system
+           # runs directly on the host’s hardware
+  - type 2 # hosted, runs as a software layer on an operating system
+  

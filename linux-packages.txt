@@ -1,0 +1,34 @@
+RPM (Red Hat Package Manager)
+YUM (The Yellow dog Updater, Modified)
+APT (The Advanced Packaging Tool)
+
+apt-get
+  update    # retrieve new lists of packages
+  install   # install new packages
+  remove    # remove packages
+  purge     # remove packages and config files
+  check     # verify that there are no broken dependencies
+
+apt-cache   # low-level tool used to manipulate APT's binary cache files
+  showpkg   # show some general information for a single package
+  search    # search the package list for a regex pattern
+  show      # show a readable record for the package
+  depends   # show raw dependency information for a package
+
+/etc/init.d   # contains a number of start/stop scripts for various services on your system
+
+/etc/systemd  # system and service manager for Linux operating systems
+              # includes daemons journald, logind and networkd, and many other
+
+systemctl start [name.service]
+systemctl stop [name.service]
+systemctl restart [name.service]
+systemctl reload [name.service]
+systemctl status [name.service]
+systemctl is-active [name.service]
+systemctl list-units --type service --all
+
+/var/spool/cron
+/etc/anacrontab
+/etc/cron.d 
+online generator - https://crontab.guru/

@@ -41,17 +41,16 @@ GRUB
   /etc/grub.conf
 
 RUNLEVELS
+  /etc/rc[0-6].d/
   systemctl get-default
   systemctl set-default runlevel0.target
-
-INTERACTIVE LOGIN SHELL
-  /etc/profile
-  ~/.bash_profile
-  ~/.bash_login or ~/.profile
-  ~/.bash_logout
-
-INTERACTIVE NON-LOGIN SHELL
-  ~/.bashrc
+  0 Halt                            Shuts down the system (symlink to poweroff.target)
+  1 Single-User-Mode                Mode for administrative tasks (rescue.target)
+  2 Multi-User-Mode                 Does not configure network interfaces (multi-user.target)
+  3 Multi-User-Mode with Networking Starts the system normally
+  4 Not used                        For special purposes 
+  5 Normal                          Runlevel 3 + display Mode (graphical.target)
+  6 Reboot                          Reboots the system (reboot.target)
 
 SELINUX
   getenforce

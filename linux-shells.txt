@@ -1,0 +1,23 @@
+SHELLS
+/etc/shells
+
+Invoked as an interactive login shell, or with `--login'
+  /etc/profile
+  ~/.bash_profile
+  ~/.bash_login or ~/.profile      # first existing readable file is read
+  ~/.bash_logout upon logout
+
+Invoked as an interactive non-login shell
+  ~/.bashrc
+
+VARIABLES
+Environment # available system-wide
+  env       # run another program in a custom environment without modifying the current one
+	printenv  # print all or the specified environment variables
+	export    # set environment variables
+Shell       # apply only to the current shell instance
+  set       # set shell variables, print list all vars
+	unset     # delete shell and environment variables
+
+xargs [OPTIONS] [COMMAND [initial-arguments]]
+reads arguments from the standard input and executes the specified command
