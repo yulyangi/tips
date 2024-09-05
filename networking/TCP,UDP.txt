@@ -13,7 +13,7 @@ Features:
   - works by breaking data into packets and adding a header to each packet
   - not provide reliable data transmission or error detection
   - transmit data more quickly and efficiently than TCP
-  - IP packet 65515 bites
+  - IP packet 65515 bytes
   - DNS uses UDP/53, DHCP uses UDP/68(client) UDP/67(server)
 
 
