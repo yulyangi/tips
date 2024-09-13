@@ -1,0 +1,4 @@
+Physical layer
+  ethtool <your_interface>             (check Speed, Duplex, Link detected, port and others )
+  ethtool -S <your_interface>          (check stats of interface, errors)
+  ethtool -S <your_interface> online   (test your interface)
