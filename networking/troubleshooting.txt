@@ -1,4 +1,25 @@
 Physical layer
-  ethtool <your_interface>             (check Speed, Duplex, Link detected, port and others )
-  ethtool -S <your_interface>          (check stats of interface, errors)
-  ethtool -S <your_interface> online   (test your interface)
+  ethtool <interface>                         # check Speed, Duplex, Link detected, port and others
+  ethtool -S <interface>                      # check stats of interface, errors)
+  ethtool -S <interface> online               # test your interface
+Data Link layer
+  ifconfig <interface>                        # check your interface
+  ip addr <interface>                         # check your interface
+  ping <ip>
+  arp -a                                      # shows ip and mac addresses table, if host have mac in that table that means host is reacheble
+  ip nei                                      # shows ip and mac addresses table, if host have mac in that table that means host is reacheble
+Network layer
+  ip route                                    # shows route table on machine  
+  ip route default via <default_gateway_ip>   # add default gateway for subnet
+  traceroute <ip_need_to_check>               # shows all hops on way, first should be default gateway
+Transport layer
+  netstat                                     # shows all internet connections
+  netstat -nt | grep <ip>                     # shows all tcp connections to <ip>
+  ss -lnt                                     # run this command on your server, it shows opened ports (ready for listening)
+  telnet <ip> <port>                          # run on client, established connection to server <ip>:<port>, then your can run GET request to check
+  nmap <ip>  or  nmap -nsP <ip>               # shows all opened ports on server, takes time to scan all 65000 ports
+Application layer
+  wireshark                                   # check flag rst (reset from server in PUSH) in TCP, check if SYN reached server
+  tcpdump -i <interface> host <ip>            # the same as wireshark without UI
+  iperf3 -s (run iperf3 on server side as server mode)     
+  iperf3 -c <server_ip_where_iperf_is_running> (check slowness of connection, bitrate to server)
