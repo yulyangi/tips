@@ -6,6 +6,7 @@ Data Link layer
   ifconfig <interface>                        # check your interface
   ip addr <interface>                         # check your interface
   ping <ip>
+  ping -s 1000 -M do <server_ip>              # send 1000 byte packet to <server_ip> with no fragmentation
   arp -a                                      # shows ip and mac addresses table, if host have mac in that table that means host is reacheble
   ip nei                                      # shows ip and mac addresses table, if host have mac in that table that means host is reacheble
 Network layer
