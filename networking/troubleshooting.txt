@@ -23,5 +23,6 @@ Application layer
   wireshark                                   # check flag rst (reset from server in PUSH) in TCP, check if SYN reached server
   tcpdump -i <interface> host <ip>            # the same as wireshark without UI
   tcpdump -i <interface> -n icmp and net x.x.x.x/x
+  dhcpdubm                                    # specifically for dhcp
   iperf3 -s (run iperf3 on server side as server mode)     
   iperf3 -c <server_ip_where_iperf_is_running> (check slowness of connection, bitrate to server)
