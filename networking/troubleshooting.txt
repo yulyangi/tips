@@ -20,7 +20,7 @@ Transport layer
   telnet <ip> <port>                          # run on client, established connection to server <ip>:<port>, then your can run GET request to check
   nmap <ip>  or  nmap -nsP <ip>               # shows all opened ports on server, takes time to scan all 65000 ports
 Application layer
-  wireshark                                   # check flag rst (reset from server in PUSH) in TCP, check if SYN reached server
+  wireshark                                   # check flag rst (reset from server) or df (do not fragrment) in TCP, check if SYN reached server
   tcpdump -i <interface> host <ip>            # the same as wireshark without UI
   tcpdump -i <interface> -n icmp and net x.x.x.x/x
   dhcpdubm                                    # specifically for dhcp
