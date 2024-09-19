@@ -14,6 +14,10 @@ mkfs.ext4 /dev/vg_newlvm/centos7_newvol			# format a logical volume called cento
 mkfs.btrfs /dev/vg_newlvm/centos7_newvol		# format a logical volume called centos7_newvol into btrfs filesystem
 mkfs.ntfs /dev/vg_newlvm/centos7_newvol			# format a logical volume called centos7_newvol into ntfs filesystem
 
+lsblk                                       # list disks
+fdisk -l /dev/sda                           # disk info, ext4 - min block size 1024 (because superblock has 1024 bytes, max - 4096 bytes
+tune2fs -l /dev/sda1                        # full info
+
 ####################################### SWAP #######################################
 cat /proc/swaps						# check if swap is activated
 free -h							# check if swap is activated
