@@ -14,3 +14,6 @@ sync;fio --randrepeat=1 --ioengine=libaio --direct=1 --name=test --filename=test
 
 Sequential Read test for throughput
 sync;fio --randrepeat=1 --ioengine=libaio --direct=1 --name=test --filename=test --bs=4M --size=4G --readwrite=read --ramp_time=4
+
+# write a bootable image to usb drive 
+sudo ddrescue --force -D ~/Downloads/ubuntu-24.04.1-desktop-amd64.iso /dev/sda
