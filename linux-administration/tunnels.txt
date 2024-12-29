@@ -4,3 +4,7 @@ sudo ip tunnel add ipip1 mode ipip local 192.168.0.105 remote 192.168.0.100 # cr
 sudo ip link set ipip1 up               # enable ipip1 interface                            
 sudo ip addr add 10.0.0.2/24 dev ipip1  # assign ip address to ipip1 interface
 ping 10.0.0.1                           # check remote machine via tunnel
+ping6 fs00::1/64                        # check IPv6
+
+sipcalc fs00::1/64                      # perfect network calculator
+sipcalc 10.0.0.0/8 
