@@ -1,5 +1,5 @@
 # do the same on local and remote machines
-sudo modprobe ipip                      # enable ipip mode, we will use ipip protocol
+sudo modprobe ipip                      # enable ipip mode, we will use ipip protocol (for IPv4), for IPv6 can be used sit protocol
 sudo ip tunnel add ipip1 mode ipip local 192.168.0.105 remote 192.168.0.100 # create tunnel between host 192.168.0.105 and remote 192.168.0.100 machine
 sudo ip link set ipip1 up               # enable ipip1 interface                            
 sudo ip addr add 10.0.0.2/24 dev ipip1  # assign ip address to ipip1 interface
