@@ -1,10 +1,18 @@
 # do the same on local and remote machines
-sudo modprobe ipip                      # enable ipip mode, we will use ipip protocol (for IPv4), for IPv6 can be used sit protocol, also gre protocol widely used
-sudo ip tunnel add ipip1 mode ipip local 192.168.0.105 remote 192.168.0.100 # create tunnel between host 192.168.0.105 and remote 192.168.0.100 machine
-sudo ip link set ipip1 up               # enable ipip1 interface                            
-sudo ip addr add 10.0.0.2/24 dev ipip1  # assign ip address to ipip1 interface
+modprobe ipip                           # enable ipip mode, we will use ipip protocol (for IPv4), for IPv6 can be used sit protocol, also gre protocol widely used
+ip tunnel add ipip1 mode ipip local 192.168.0.105 remote 192.168.0.100 # create tunnel between host 192.168.0.105 and remote 192.168.0.100 machine
+ip tunnel add gre1 mode gre key 123 local 192.168.0.105 remote 192.168.0.100 # with specific key (flag in ip packet)
+ip tunnel add gre1 mode gre key 123 local 192.168.0.105                      # also it works without remote, but need to add neighbor to route table
+ip neighbor add <remote_ip> lladdr <remote_ip> dev gre1
+
+ip link set ipip1 up                    # enable ipip1 interface                            
+ip addr add 10.0.0.2/24 dev ipip1       # assign ip address to ipip1 interface
 ping 10.0.0.1                           # check remote machine via tunnel
 ping6 fs00::1/64                        # check IPv6
+arp                                     # shows route table
+ip neigh                                # shows route table
+ip tunnel del ipip1                     # delete interface
+ip tunnel show
 
 sipcalc fs00::1/64                      # perfect network calculator
 sipcalc 10.0.0.0/8 
