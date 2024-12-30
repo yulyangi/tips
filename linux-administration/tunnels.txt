@@ -1,6 +1,6 @@
 # do the same on local and remote machines
 modprobe ipip                           # enable ipip mode, we will use ipip protocol (for IPv4), for IPv6 can be used sit protocol, also gre protocol widely used
-ip tunnel add ipip1 mode ipip local 192.168.0.105 remote 192.168.0.100 # create tunnel between host 192.168.0.105 and remote 192.168.0.100 machine
+ip tunnel add ipip1 mode ipip local 192.168.0.105 remote 192.168.0.100       # create tunnel between host 192.168.0.105 and remote 192.168.0.100 machine
 ip tunnel add gre1 mode gre key 123 local 192.168.0.105 remote 192.168.0.100 # with specific key (flag in ip packet)
 ip tunnel add gre1 mode gre key 123 local 192.168.0.105                      # also it works without remote, but need to add neighbor to route table
 ip neighbor add <remote_ip> lladdr <remote_ip> dev gre1
