@@ -26,3 +26,6 @@ Application layer
   dhcpdubm                                    # specifically for dhcp
   iperf3 -s (run iperf3 on server side as server mode)     
   iperf3 -c <server_ip_where_iperf_is_running> (check slowness of connection, bitrate to server)
+
+dig <DOMAIN_NAME> +trace @1.1.1.1
+dig <DOMAIN_NAME> +trace @8.8.8.8
