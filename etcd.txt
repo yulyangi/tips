@@ -1,0 +1,9 @@
+ETCDCTL_API=3
+ETCDCTL_CACERT=/etc/kubernetes/pki/etcd/ca.crt
+ETCDCTL_CERT=/etc/kubernetes/pki/etcd/server.crt
+ETCDCTL_KEY=/etc/kubernetes/pki/etcd/server.key
+
+etcdctl snapshot save 
+etcdctl endpoint health
+etcdctl get
+etcdctl put
