@@ -1,4 +1,5 @@
 ####################################### LVM #######################################
+sudo parted -l
 pvcreate /dev/sdb1 					# utility to initialize and display physical volumes
 pvdisplay
 pvscan
