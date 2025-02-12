@@ -15,8 +15,8 @@ Network layer
   traceroute <ip_need_to_check>               # shows all hops on way, first should be default gateway
 Transport layer
   netstat                                     # shows all internet connections
-  netstat -nt | grep <ip>                     # shows all tcp connections to <ip>
-  ss -lnt                                     # run this command on your server, it shows opened ports (ready for listening)
+  netstat -lntp | grep <ip>                     # shows all tcp connections to <ip>
+  ss -lntp                                     # run this command on your server, it shows opened ports (ready for listening)
   telnet <ip> <port>                          # run on client, established connection to server <ip>:<port>, then your can run GET request to check
   nmap <ip>  or  nmap -nsP <ip>               # shows all opened ports on server, takes time to scan all 65000 ports
 Application layer
