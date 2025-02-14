@@ -29,3 +29,17 @@ Application layer
 
 dig <DOMAIN_NAME> +trace @1.1.1.1
 dig <DOMAIN_NAME> +trace @8.8.8.8
+
+Network namespaces
+ip netns                                       # list namespaces
+ip netns add foo                               # add foo namespace
+ip netns add bar                               # add bar namespace
+ip -n foo ip link                              # run `ip link` in foo namespace
+ip netnx exec foo ip link                      # run `ip link` in foo namespace
+ip link add veth-foo type veth peer name veth-bar  # create a veth pair veth-foo and veth-bar (pipe between interfaces)
+ip link set veth-foo netns foo                 # attach veth-foo to foo namespace
+ip link set veth-bar netns bar                 # attach veth-bar to bar namespace
+ip -n foo addr add 192.168.15.1 dev veth-foo   # assign ip address to veth-foo interface
+ip -n bar addr add 192.168.15.2 dev veth-bar   # assign ip address to veth-bar interface
+ip -n foo link set veth-foo up                 # enable veth-foo
+ip -n bar link set veth-bar up                 # enable veth-bar
