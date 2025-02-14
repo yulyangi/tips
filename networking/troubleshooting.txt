@@ -36,10 +36,29 @@ ip netns add foo                               # add foo namespace
 ip netns add bar                               # add bar namespace
 ip -n foo ip link                              # run `ip link` in foo namespace
 ip netnx exec foo ip link                      # run `ip link` in foo namespace
-ip link add veth-foo type veth peer name veth-bar  # create a veth pair veth-foo and veth-bar (pipe between interfaces)
+ip link add veth-foo type veth peer name veth-bar       # create a veth pair veth-foo and veth-bar (pipe or cable between interfaces)
 ip link set veth-foo netns foo                 # attach veth-foo to foo namespace
 ip link set veth-bar netns bar                 # attach veth-bar to bar namespace
-ip -n foo addr add 192.168.15.1 dev veth-foo   # assign ip address to veth-foo interface
-ip -n bar addr add 192.168.15.2 dev veth-bar   # assign ip address to veth-bar interface
+ip -n foo addr add 192.168.15.1/24 dev veth-foo   # assign ip address to veth-foo interface
+ip -n bar addr add 192.168.15.2/24 dev veth-bar   # assign ip address to veth-bar interface
 ip -n foo link set veth-foo up                 # enable veth-foo
 ip -n bar link set veth-bar up                 # enable veth-bar
+
+Working with bridge
+ip link add v-net-0 type bridge                # create a switch 
+ip link set v-net-0 up                         # enable enterface(switch)
+ip link add veth-foo type veth peer name veth-foo-br    # create a cable between foo namespace and bridge(switch)
+ip link add veth-bar type veth peer name veth-bar-br    # create a cable between bar namespace and bridge(switch)
+ip link set veth-foo netns foo                 # attach veth-foo to foo namespace
+ip link set veth-bar netns bar                 # attach veth-bar to bar namespace
+ip link set veth-foo-br master v-net-0         # attach veth-foo-br to bridge
+ip link set veth-bar-br master v-net-0         # attach veth-bar-br to bridge
+ip -n foo addr add 192.168.15.1/24 dev veth-foo   # assign ip address to veth-foo interface
+ip -n bar addr add 192.168.15.2/24 dev veth-bar   # assign ip address to veth-bar interface
+ip -n foo link set veth-foo up                 # enable veth-foo
+ip -n bar link set veth-bar up                 # enable veth-bar
+ip addr add 192.168.15.3/24 dev v-net-0        # assign ip address to v-net-0 interface, now we are able to connecnt to namespaces from host
+
+ip -n foo ip route add 192.168.1.0/24 via 192.168.15.5  # now packats from foo ns know about gateway to reach 192.168.0.1/24 network (our host)
+iptables -t nat -A POSTROUTING -s 192.168.15.0/24 -j MASQUERADE # replace source ip (namespace) in packets by host ip, so namespace can be reached from outside
+ip -n foo ip route add default via 192.168.15.5         # now we can reach internet from namespace
